@@ -66,18 +66,36 @@ class AxiosRequest {
       }
     )
   }
-  requst(config: RequestConfig):void {
-
-    if(config.interceptor?.requestInterceptor) {
+  request<T = any>(config: RequestConfig<T>):Promise<T> {
+    return new Promise((resolve, reject) => {
+      if(config.interceptor?.requestInterceptor) {
       config = config.interceptor.requestInterceptor(config)
     }
     if (config.showLoading === false) {
       this.showLoading = config.showLoading
     }
-    this.instance.request(config).then(res => {
+    this.instance.request<any,T>(config).then(res => {
       // console.log(res);
       this.showLoading = DEAFULT_LOADING
+      resolve(res)
     })
+    })
+
+  }
+  get<T = any>(config: RequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'GET' })
+  }
+
+  post<T = any>(config: RequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'POST' })
+  }
+
+  delete<T = any>(config: RequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'DELETE' })
+  }
+
+  patch<T = any>(config: RequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'PATCH' })
   }
 }
 
