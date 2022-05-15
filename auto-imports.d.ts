@@ -5,7 +5,6 @@ declare global {
   const ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
   const ElForm: typeof import('element-plus/es')['ElForm']
   const ElFormItem: typeof import('element-plus/es')['ElFormItem']
-  const ElIcon: typeof import('element-plus/es')['ElIcon']
   const ElInput: typeof import('element-plus/es')['ElInput']
   const ElLink: typeof import('element-plus/es')['ElLink']
   const ElTabPane: typeof import('element-plus/es')['ElTabPane']

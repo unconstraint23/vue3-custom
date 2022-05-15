@@ -11,7 +11,7 @@
           <span>账号密码登录</span>
 
         </template>
-        <login-account />
+        <login-account ref="accountRef"/>
 
       </el-tab-pane>
       <el-tab-pane>
@@ -24,18 +24,18 @@
 
     </el-tabs>
     <div class="account-control">
-      <el-checkbox >记住密码</el-checkbox>
+      <el-checkbox v-model="isKeepPassword">记住密码</el-checkbox>
       <el-link type="primary">忘记密码</el-link>
     </div>
 
-    <el-button type="primary" class="login-btn"
+    <el-button type="primary" class="login-btn" @click="signin"
       >立即登录</el-button
     >
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent,ref } from 'vue'
 import loginAccount from './login-account.vue';
 import codeLogin from './code-login.vue';
 export default defineComponent({
@@ -44,8 +44,18 @@ export default defineComponent({
     codeLogin
   },
   setup() {
-    return {
+    const isKeepPassword = ref(false)
+    const accountRef = ref<InstanceType <typeof loginAccount>>()
+    const signin = () => {
 
+      console.log(accountRef);
+
+      accountRef.value?.login()
+    }
+    return {
+      isKeepPassword,
+      signin,
+      accountRef
     }
   },
 })

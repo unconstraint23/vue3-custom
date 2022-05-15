@@ -1,4 +1,4 @@
-import { ElButton,ElContainer,ElMessageBox,ElMessage, ElTabs, ElTabPane, ElForm, ElFormItem, ElCheckbox } from 'element-plus'
+import { ElButton,ElContainer,ElMessageBox,ElMessage, ElTabs, ElTabPane, ElForm, ElFormItem, ElCheckbox, ElSelect } from 'element-plus'
 import { App } from 'vue'
 
 const components = [
@@ -8,7 +8,8 @@ const components = [
     ElTabPane,
     ElForm,
     ElFormItem,
-    ElCheckbox
+    ElCheckbox,
+    ElSelect
 ]
 
 
