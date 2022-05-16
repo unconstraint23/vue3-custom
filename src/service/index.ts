@@ -1,12 +1,21 @@
 import  AxiosRequest  from './request';
 import { BASE_URL,TIME_OUT } from './request/config';
+import localCache from '@/utils/cache';
 
 export const masterReq = new AxiosRequest({
   baseURL: BASE_URL,
   timeout: TIME_OUT,
   interceptor: {
     requestInterceptor: (config) => {
+      const token = localCache.getCache("token")
 
+
+      if(token) {
+          if(config.headers)
+          config.headers.Authorization = `Bearer ${token}`
+
+
+      }
 
       return config
     },

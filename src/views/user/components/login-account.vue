@@ -8,12 +8,12 @@
       :rules="rules"
       :model="formData"
     >
-      <el-form-item label="账号" prop="username">
+      <el-form-item label="账号" prop="name">
         <el-input
           class="el-input"
           type="text"
           autocomplete="off"
-          v-model="formData.username"
+          v-model="formData.name"
         />
       </el-form-item>
       <el-form-item label="密码" prop="password">
@@ -35,19 +35,24 @@
 import { defineComponent, reactive, ref } from 'vue'
 import { rules } from '../utils/rule'
 import { ElForm } from 'element-plus'
+import { useStore } from 'vuex'
 export default defineComponent({
   setup() {
+    const store = useStore()
     const formData = reactive({
-      username: '',
+      name: '',
       password: '',
-      code: ''
+
     })
     const loginForm = ref<InstanceType<typeof ElForm>>()
     const login = () => {
       console.log("login");
 
       loginForm.value?.validate((valid) => {
-        console.log(valid)
+
+        if(valid) {
+          store.dispatch("login/accountLoginAction", {...formData})
+        }
       })
     }
     const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
