@@ -1,21 +1,18 @@
 <template>
   <div class="home">
-    <nav>
-    <router-link to="/">Home</router-link>
-   <el-button type="primary">哈哈哈</el-button>
-  </nav>
+   <layout />
 
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-
+import layout from '@/components/layout/index.vue';
 
 export default defineComponent({
   name: "HomeView",
   components: {
-
+    layout
   },
 });
 </script>

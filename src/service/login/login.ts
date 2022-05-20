@@ -15,8 +15,15 @@ export function accountLoginReq(account: IAccount) {
 }
 
 export function getUserInfo(id: string|number) {
-  return masterReq.get({
+  return masterReq.get<IDataType>({
     url: LoginAPI.LoginUserInfo + id,
     showLoading: false
   })
 }
+export function getUserMenu(id: string|number ) {
+  return masterReq.get<IDataType>({
+    url: LoginAPI.UserMenus + id + '/menu',
+    showLoading: false
+  })
+}
+

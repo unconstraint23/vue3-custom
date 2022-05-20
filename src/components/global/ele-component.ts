@@ -1,6 +1,18 @@
-import { ElButton,ElContainer,ElMessageBox,ElMessage, ElTabs, ElTabPane, ElForm, ElFormItem, ElCheckbox, ElSelect } from 'element-plus'
+import { ElButton,ElContainer,ElMessageBox,ElMessage, ElTabs, ElTabPane, ElForm, ElFormItem, ElCheckbox, ElSelect, ElHeader, ElMain, ElRow, ElCol, ElSubMenu, ElRadioGroup } from 'element-plus'
 import { App } from 'vue'
-
+import {Fold,Expand, Van, Tools, CirclePlus, ElementPlus,Monitor, Setting, Goods, ChatLineRound} from '@element-plus/icons-vue'
+const Icon = [
+  Fold,
+  Expand,
+  Van,
+  Tools,
+  CirclePlus,
+  ElementPlus,
+  Monitor,
+  Setting,
+  Goods,
+  ChatLineRound
+]
 const components = [
     ElButton,
     ElContainer,
@@ -9,8 +21,21 @@ const components = [
     ElForm,
     ElFormItem,
     ElCheckbox,
-    ElSelect
+    ElSelect,
+    ElContainer,
+    ElHeader,
+    ElMain,
+    ElRow,
+    ElCol,
+    ElSubMenu,
+    ElRadioGroup
 ]
+export function registerIcon(app:App):void {
+for (const  component of Icon) {
+  app.component(component.name, component)
+}
+}
+
 
 
 export default function (app:App):void {

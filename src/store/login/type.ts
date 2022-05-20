@@ -1,4 +1,4 @@
-import { Module } from "vuex"
+
 
 export interface ILoginState {
   token: any,

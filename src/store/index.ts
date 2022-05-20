@@ -1,8 +1,9 @@
-import { createStore } from "vuex";
+import { createStore,useStore as UseVuexStore,Store } from "vuex";
 import login from "./login/login";
+import { IStoreType } from './type';
 
 
-export default createStore({
+const store = createStore({
   state() {
     return {
       name: '',
@@ -16,3 +17,12 @@ export default createStore({
     login
   },
 });
+
+export function getLoginData() {
+  store.dispatch("login/initLoginData")
+}
+export function useStore():Store<IStoreType> {
+  return UseVuexStore()
+}
+
+export default store
