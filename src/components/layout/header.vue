@@ -7,17 +7,24 @@
     <el-icon class="eicon" v-show="isFold" @click="handleFoldClick" :size="30">
       <Expand />
     </el-icon>
-
+    <div class="menu-name">
+      bread
     </div>
-
+    </div>
+    <div class="right">
+      <user-info />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent,ref } from 'vue'
-
+import userInfo from './userInfo.vue';
 export default defineComponent({
   name: "headerView",
+  components: {
+    userInfo
+  },
   setup(props, {emit}) {
     const isFold = ref(false)
     const handleFoldClick = () => {
@@ -36,6 +43,20 @@ export default defineComponent({
   height: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  .left{
+    display: flex;
+    align-items: center;
+    .menu-name {
+      margin-left: 15px;
+    }
+  }
+  .right {
+
+
+
+
+  }
   .eicon {
     cursor: pointer;
   }

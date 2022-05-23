@@ -9,7 +9,11 @@
         <el-header>
           <Header @foldChange="handleFold" />
         </el-header>
-        <el-main>Main</el-main>
+        <el-main class="page-content">
+          <div class="page-info">
+            <router-view></router-view>
+          </div>
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -61,5 +65,13 @@ export default defineComponent({
 
 .el-main {
   background: #e9eef3;
+}
+.page-content {
+  height: calc(100% - 48px);
+
+  .page-info {
+    background-color: #fff;
+    border-radius: 5px;
+  }
 }
 </style>

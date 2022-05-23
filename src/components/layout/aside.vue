@@ -29,6 +29,7 @@
               v-for="child in item.children"
               :key="child.id"
               :index="child.id + ''"
+              @click="jump(child)"
             >
               {{ child.name }}
             </el-menu-item>
@@ -37,7 +38,7 @@
         <!-- 不可展开的菜单 -->
         <template v-else-if="item.type == 2">
           <el-menu-item :index="item.id + ''">
-             <el-icon v-if="'icon' in item" class="eicon" :size="20">
+             <el-icon v-if="item.icon" class="eicon" :size="20">
                 <component :is="item.icon" />
               </el-icon>
             <span>{{item.name}}</span>
@@ -50,6 +51,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useStore } from '@/store'
+import { useRouter } from 'vue-router';
 import _ from 'lodash'
 export default defineComponent({
   name: 'asideView',
@@ -65,6 +67,7 @@ export default defineComponent({
   setup(props) {
     // 这里这样做是想取到login模块下的类型
     const store = useStore()
+    const router = useRouter()
     const tmp = store.state.login.userMenus
 
     const userMenu = _.cloneDeep(tmp)
@@ -88,11 +91,17 @@ export default defineComponent({
     const handleClose = () => {
       return {}
     }
+    const jump = (child:any) => {
+      router.push({
+        path: child.url ?? '/not-found'
+      })
+    }
     return {
       handleOpen,
       handleClose,
       userMenu,
-      handlerMenu
+      handlerMenu,
+      jump
     }
   }
 })

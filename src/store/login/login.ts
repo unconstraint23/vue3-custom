@@ -5,6 +5,7 @@ import { IRootState } from '../type';
 import { ILoginState } from './type';
 import localCache from '@/utils/cache';
 import router from '@/router'
+import { mapMenuToRoute } from '@/utils/map-menu';
 const loginModule:Module<ILoginState,IRootState> = {
     namespaced: true,
     state() {
@@ -23,6 +24,15 @@ const loginModule:Module<ILoginState,IRootState> = {
         },
         setUserMenu(state, menu) {
           state.userMenus = menu
+          const routes = mapMenuToRoute(menu)
+
+          routes.forEach(route => {
+            // 添加一条新的路由记录作为现有路由的子路由。 addRoute(parentName: string | symbol, route: RouteRecordRaw): () => void
+            // 参考:https://router.vuejs.org/zh/api/#addroute
+            router.addRoute("main",route)
+          })
+
+
         }
     },
     actions: {

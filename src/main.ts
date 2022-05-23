@@ -11,7 +11,9 @@ import "normalize.css"
 
 
 const rootApp = createApp(AppView)
-rootApp.use(store).use(router)
-registerI(rootApp)
+rootApp.use(store)
 getLoginData()
+rootApp.use(router)
+registerI(rootApp)
+
 rootApp.mount("#app");
