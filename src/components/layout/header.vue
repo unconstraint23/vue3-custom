@@ -8,7 +8,7 @@
       <Expand />
     </el-icon>
     <div class="menu-name">
-      bread
+      <breadcrumb :breadcrumbs="breadcrumbs"/>
     </div>
     </div>
     <div class="right">
@@ -18,14 +18,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent,ref } from 'vue'
+import { defineComponent,ref,computed } from 'vue'
 import userInfo from './userInfo.vue';
+import breadcrumb from '../../base-ui/breadcrumb';
+import { pathMapBreadcrumbs } from '@/utils/map-menu';
+import { useStore } from '@/store';
+import { useRoute } from 'vue-router';
 export default defineComponent({
   name: "headerView",
   components: {
-    userInfo
+    userInfo,
+    breadcrumb
   },
   setup(props, {emit}) {
+    const store = useStore()
+    const breadcrumbs = computed(() => {
+      const userMenu = store.state.login.userMenus
+      const route = useRoute()
+      return pathMapBreadcrumbs(userMenu,route.path)
+    })
     const isFold = ref(false)
     const handleFoldClick = () => {
        isFold.value = !isFold.value
@@ -33,7 +44,8 @@ export default defineComponent({
     }
     return {
       isFold,
-      handleFoldClick
+      handleFoldClick,
+      breadcrumbs
     }
   },
 })

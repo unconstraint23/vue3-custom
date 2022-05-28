@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import  localCache  from '@/utils/cache';
 // import user from "./main/system/user";
 // import role from "./main/system/role";
-
+import { fristMenu } from '@/utils/map-menu';
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -31,7 +31,7 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
 });
-router.beforeEach(to => {
+router.beforeEach((to,from,next) => {
   if (to.path !== '/login') {
     const token = localCache.getCache('token')
     if (!token) {
@@ -39,14 +39,13 @@ router.beforeEach(to => {
     }
   }
 
-  console.log(router.getRoutes())
-  console.log(to)
 
-  if (to.path.indexOf('/main') !== -1) {
-    if (to.name === 'notFound') {
-      to.name = 'user'
-    }
+
+  if (to.path == "/main" || to.path == "/") {
+
+    next({path:fristMenu.url})
   }
+  next()
 })
 
 export default router;

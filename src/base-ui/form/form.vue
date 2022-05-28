@@ -1,9 +1,12 @@
 <template>
   <div class="form">
+     <div class="header">
+      <slot name="header"></slot>
+    </div>
     <el-form :label-width="labelWidth">
       <el-row>
         <template v-for="item in formItems" :key="item.label">
-          <el-col>
+          <el-col v-bind="colLayout">
             <el-form-item
               :label="item.label"
               :rules="item.rules"
@@ -16,6 +19,7 @@
                   :placeholder="item.placeholder"
                   v-bind="item.otherOptions"
                   :show-password="item.type === 'password'"
+                  v-model="formData[`${item.field}`]"
                 />
               </template>
               <template v-else-if="item.type === 'select'">
@@ -23,6 +27,7 @@
                   :placeholder="item.placeholder"
                   v-bind="item.otherOptions"
                   style="width: 100%"
+                  v-model="formData[`${item.field}`]"
                 >
                   <el-option
                     v-for="option in item.options"
@@ -36,6 +41,7 @@
                 <el-date-picker
                   style="width: 100%"
                   v-bind="item.otherOptions"
+                  v-model="formData[`${item.field}`]"
                 ></el-date-picker>
               </template>
             </el-form-item>
@@ -43,14 +49,22 @@
         </template>
       </el-row>
     </el-form>
+    <div class="footer">
+      <slot name="footer"></slot>
+    </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent,PropType } from 'vue'
-import { IFormItem } from '../type'
+import { computed, defineComponent,PropType, ref, watch } from 'vue'
+import { IFormItem } from './type'
+import _ from 'lodash';
 export default defineComponent({
   name: "formView",
   props: {
+    modelValue: {
+      type: Object,
+      required: true
+    },
     formItems: {
       type: Array as PropType<IFormItem[]>,
       default: () => []
@@ -74,9 +88,28 @@ export default defineComponent({
       })
     }
   },
-  setup() {
-    return {
+  emits: ['update:modelValue'],
+  setup(props, {emit}) {
+    const formData = ref(_.cloneDeep(props.modelValue))
+    // 计算属性是错误写法
+  // const formData = computed({
+  //     get: () => props.modelValue, //这里直接拿到父组件传过来的值直接用做修改，这样做是不对的
+  //     set: (newValue) => {  // set方法并没有触发，当formData里边的属性发生改变时，computed无法检测到
+  //       console.log("--------");
+  //       emit("update:modelValue",newValue)
+  //     }
 
+  //   })
+    watch(
+      formData,
+      newValue => {
+        console.log(newValue)
+        emit("update:modelValue",newValue)
+      },
+      {deep: true}
+    )
+    return {
+      formData
     }
   },
 })

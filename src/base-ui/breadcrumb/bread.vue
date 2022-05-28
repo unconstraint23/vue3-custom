@@ -1,0 +1,28 @@
+<template>
+  <div>
+    <el-breadcrumb separator="/">
+    <el-breadcrumb-item v-for="(item) in breadcrumbs" :key="item.name">
+        {{item.name}}
+    </el-breadcrumb-item>
+
+  </el-breadcrumb>
+  </div>
+</template>
+<script lang="ts">
+import { defineComponent,PropType } from 'vue'
+import { IBreadcrumb } from './type';
+export default defineComponent({
+  name: "breadView",
+  props: {
+    breadcrumbs: {
+      type: Array as PropType<IBreadcrumb[]>,
+      default: () => []
+    }
+  },
+  setup() {
+    return {
+
+    }
+  },
+})
+</script>

@@ -1,5 +1,7 @@
+import { IBreadcrumb } from '@/base-ui/breadcrumb'
 import { RouteRecordRaw } from 'vue-router'
 
+let fristMenu: any = null
 export function mapMenuToRoute(userMenu: any[]): RouteRecordRaw[] {
   const routes: RouteRecordRaw[] = []
   // 默认展示所有路由
@@ -27,6 +29,9 @@ export function mapMenuToRoute(userMenu: any[]): RouteRecordRaw[] {
         const route = allRoute.find((route) => route.path == menu.url)
         if (route) {
           routes.push(route)
+          if(!fristMenu) {
+            fristMenu = menu
+          }
         }
       } else {
         _recurseGetRoute(menu.children)
@@ -37,3 +42,34 @@ export function mapMenuToRoute(userMenu: any[]): RouteRecordRaw[] {
 
   return routes
 }
+
+export function pathMapBreadcrumbs(userMenu: any[], currentPath:string):any {
+
+
+  const breadcrumbs: IBreadcrumb[] = []
+  pathMapToMenu(userMenu,currentPath,breadcrumbs)
+  return breadcrumbs
+}
+
+export function pathMapToMenu(userMenu:any[],currentPath: string, breadcrumb?: IBreadcrumb[]) :any {
+
+  for (const menu of userMenu) {
+
+      if(menu.type === 1) {
+        const findMenu = pathMapToMenu(menu.children ?? [], currentPath)
+
+        if(findMenu) {
+          breadcrumb?.push({name: menu.name})
+          breadcrumb?.push({name: findMenu.name})
+          return findMenu
+        }
+      } else if(menu.type === 2 && menu.url === currentPath) {
+        console.log(menu);
+
+        return menu
+      }
+   }
+
+}
+
+export {fristMenu}

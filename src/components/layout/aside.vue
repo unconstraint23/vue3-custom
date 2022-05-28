@@ -5,7 +5,7 @@
       <span v-if="!collapse" class="tit">Vue3+TS</span>
     </div>
     <el-menu
-      default-active="2"
+      :default-active="defaultValue"
       active-text-color="#ffd04b"
       background-color="#001529"
       class="el-menu-vertical-demo"
@@ -49,9 +49,10 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent,ref } from 'vue'
 import { useStore } from '@/store'
-import { useRouter } from 'vue-router';
+import { useRouter,useRoute } from 'vue-router';
+import { pathMapToMenu } from '@/utils/map-menu';
 import _ from 'lodash'
 export default defineComponent({
   name: 'asideView',
@@ -68,10 +69,16 @@ export default defineComponent({
     // 这里这样做是想取到login模块下的类型
     const store = useStore()
     const router = useRouter()
-    const tmp = store.state.login.userMenus
+    const route = useRoute()
+    const tmp = computed(() => store.state.login.userMenus)
 
-    const userMenu = _.cloneDeep(tmp)
 
+    const userMenu = _.cloneDeep(tmp.value)
+
+
+    const menu = pathMapToMenu(userMenu,route.path)
+
+    const defaultValue = ref(menu.id + '')
     const handlerMenu = () => {
       userMenu.forEach((item: any) => {
         if ('icon' in item) {
@@ -101,7 +108,8 @@ export default defineComponent({
       handleClose,
       userMenu,
       handlerMenu,
-      jump
+      jump,
+      defaultValue
     }
   }
 })
