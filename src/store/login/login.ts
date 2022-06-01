@@ -5,14 +5,15 @@ import { IRootState } from '../type';
 import { ILoginState } from './type';
 import localCache from '@/utils/cache';
 import router from '@/router'
-import { mapMenuToRoute } from '@/utils/map-menu';
+import { mapMenusToPermissions, mapMenuToRoute } from '@/utils/map-menu';
 const loginModule:Module<ILoginState,IRootState> = {
     namespaced: true,
     state() {
       return {
         token: '',
         userInfo: {},
-        userMenus: []
+        userMenus: [],
+        permissions: []
       }
     },
     mutations: {
@@ -31,7 +32,8 @@ const loginModule:Module<ILoginState,IRootState> = {
             // 参考:https://router.vuejs.org/zh/api/#addroute
             router.addRoute("main",route)
           })
-
+          const permissions = mapMenusToPermissions(menu)
+          state.permissions = permissions
 
         }
     },

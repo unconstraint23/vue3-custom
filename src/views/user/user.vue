@@ -1,29 +1,38 @@
 <template>
   <div class="user">
-    <page-search :searchFormConfig="searchFormConfig" >
+    <page-search
+      :searchFormConfig="searchFormConfig"
+      @resetClick="handleReset"
+      @queryDataClick="handleQuery"
+    >
     </page-search>
-
-    <div class="content">
-
-    </div>
+    <page-content ref="pageContentRef" :contentTableConfig="contentTableConfig" pageName="users">
+    </page-content>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { searchFormConfig } from './config/userConfig';
-import PageSearch from '@/base-ui/page-search/page-search.vue';
+import { computed, defineComponent } from 'vue'
+import { searchFormConfig } from './config/userConfig'
+import { contentTableConfig } from './config/content.config'
+import PageSearch from '@/base-ui/page-search/page-search.vue'
+import PageContent from '@/components/page-content'
+import { usePageSearch } from '@/hooks/use-page-search'
 export default defineComponent({
   name: 'userView',
   components: {
-
-    PageSearch
-},
+    PageSearch,
+    PageContent
+  },
   setup() {
-
+    const {pageContentRef, handleQuery,handleReset} = usePageSearch()
 
     return {
-      searchFormConfig
+      searchFormConfig,
+      contentTableConfig,
+      pageContentRef,
+      handleQuery,
+      handleReset
     }
   }
 })
@@ -31,14 +40,12 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .user {
-  padding: 15px 0;
+  padding: 10px 0px;
 }
 .el-col {
   border-radius: 4px;
 }
-.content {
-  height: 90%;
-}
+
 .grid-content {
   border-radius: 4px;
   min-height: 36px;

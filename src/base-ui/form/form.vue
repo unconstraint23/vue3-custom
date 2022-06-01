@@ -90,7 +90,8 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup(props, {emit}) {
-    const formData = ref(_.cloneDeep(props.modelValue))
+    // const formData = ref(_.cloneDeep(props.modelValue))
+    const formData = ref({...props.modelValue})
     // 计算属性是错误写法
   // const formData = computed({
   //     get: () => props.modelValue, //这里直接拿到父组件传过来的值直接用做修改，这样做是不对的

@@ -68,7 +68,7 @@ export default defineComponent({
 }
 .page-content {
   height: calc(100% - 48px);
-
+      background-color: #f0f2f5;
   .page-info {
     background-color: #fff;
     border-radius: 5px;

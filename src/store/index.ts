@@ -1,5 +1,6 @@
 import { createStore,useStore as UseVuexStore,Store } from "vuex";
 import login from "./login/login";
+import system from "./main/system/system";
 import { IStoreType } from './type';
 
 
@@ -14,7 +15,8 @@ const store = createStore({
   mutations: {},
   actions: {},
   modules: {
-    login
+    login,
+    system
   },
 });
 

@@ -1,5 +1,6 @@
 import { masterReq } from '../index';
-import { IAccount, IDataType, ILoginResult } from './type';
+import { IAccount, ILoginResult } from './type';
+import { IDataType } from '../type';
 
 enum LoginAPI {
   AccountLogin = '/login',
