@@ -6,8 +6,8 @@
       v-bind="contentTableConfig"
       v-model:page="pageInfo"
     >
-      <template #headerHandler>
-        <el-button type="primary" v-if="isCreate">新建用户</el-button>
+      <template #headerHandler v-if="isCreate">
+        <el-button type="primary" @click="addUser">{{ btnName }}</el-button>
       </template>
       <template #status="scope">
         <el-button :type="scope.row.enable ? 'success' : 'danger'">{{
@@ -20,15 +20,25 @@
       <template #updateAt="scope">
         <span>{{ $filters.formatTime(scope.row.updateAt) }}</span>
       </template>
-      <template #handler>
+      <template #handler="scope">
         <div class="handle-btns">
-          <el-button v-if="isUpdate" size="small" type="text">
+          <el-button
+            v-if="isUpdate"
+            size="small"
+            type="text"
+            @click="editUser(scope.row)"
+          >
             <el-icon>
               <Edit />
             </el-icon>
             编辑
           </el-button>
-          <el-button v-if="isDelete" size="small" type="text">
+          <el-button
+            v-if="isDelete"
+            size="small"
+            type="text"
+            @click="deleteUser(scope.row)"
+          >
             <el-icon>
               <Delete />
             </el-icon>
@@ -50,10 +60,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, watch } from 'vue'
+import { defineComponent, computed, ref, watch, getCurrentInstance } from 'vue'
 import rjTable from '@/base-ui/table'
 import { useStore } from '@/store'
-import { usePermission } from '@/hooks/use-permission';
+import { usePermission } from '@/hooks/use-permission'
 export default defineComponent({
   props: {
     contentTableConfig: {
@@ -63,14 +73,20 @@ export default defineComponent({
     pageName: {
       type: String,
       required: true
+    },
+    btnName: {
+      type: String,
+      default: '新增'
     }
   },
   components: {
     rjTable
   },
+  emits: ['add', 'edit'],
   setup(props, { emit }) {
     const store = useStore()
-    const pageInfo = ref({ currentPage: 0, pageSize: 10 })
+    const { proxy } = getCurrentInstance() as any
+    const pageInfo = ref({ currentPage: 1, pageSize: 10 })
     let queryParam = {}
     const isCreate = usePermission(props.pageName, 'create')
     const isUpdate = usePermission(props.pageName, 'update')
@@ -78,23 +94,22 @@ export default defineComponent({
     const isQuery = usePermission(props.pageName, 'query')
     watch(pageInfo, () => getData(queryParam))
     const getData = (queryInfo: any) => {
-
       queryParam = queryInfo
       store.dispatch('system/getPageListActions', {
-      pageName: props.pageName,
-      queryInfo: {
-        offset: pageInfo.value.currentPage * pageInfo.value.pageSize,
-        size: pageInfo.value.pageSize,
-        ...queryParam
-      }
-    })
+        pageName: props.pageName,
+        queryInfo: {
+          offset: (pageInfo.value.currentPage - 1) * pageInfo.value.pageSize,
+          size: pageInfo.value.pageSize,
+          ...queryParam
+        }
+      })
     }
     getData(queryParam)
 
     const dataList = computed(() =>
       store.getters[`system/pageListData`](props.pageName)
     )
- const dataCount = computed(() =>
+    const dataCount = computed(() =>
       store.getters[`system/pageListCount`](props.pageName)
     )
     const otherPropSlots = props.contentTableConfig?.propList.filter(
@@ -107,6 +122,45 @@ export default defineComponent({
         return true
       }
     )
+    const deleteUser = (row: any) => {
+      proxy.$msgBox
+        .confirm(
+          'proxy will permanently delete the file. Continue?',
+          'Warning',
+          {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'warning',
+            draggable: true
+          }
+        )
+        .then(async () => {
+          try {
+            store.dispatch('system/deletePageDataAction', {
+              pageName: props.pageName,
+              id: row.id
+            })
+            proxy.$message({
+              type: 'success',
+              message: '删除成功'
+            })
+
+            // eslint-disable-next-line no-empty
+          } catch (error) {}
+        })
+        .catch(() => {
+          proxy.$message({
+            type: 'info',
+            message: '取消操作'
+          })
+        })
+    }
+    const addUser = () => {
+      emit('add')
+    }
+    const editUser = (item: any) => {
+      emit('edit', item)
+    }
     return {
       dataList,
       pageInfo,
@@ -116,7 +170,10 @@ export default defineComponent({
       isCreate,
       isQuery,
       isUpdate,
-      isDelete
+      isDelete,
+      deleteUser,
+      addUser,
+      editUser
     }
   }
 })

@@ -16,6 +16,7 @@ rootApp.use(store)
 getLoginData()
 rootApp.use(router)
 rootApp.use(globalRegister)
+
 registerI(rootApp)
 
 rootApp.mount("#app");

@@ -6,4 +6,5 @@ declare module '*.vue' {
 }
 
 declare module 'lodash'
+declare module '*.json'
 

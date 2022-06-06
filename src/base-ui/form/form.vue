@@ -3,13 +3,14 @@
      <div class="header">
       <slot name="header"></slot>
     </div>
-    <el-form :label-width="labelWidth">
+    <el-form :label-width="labelWidth" :rules="rules" ref="commonForm" :model="formData">
       <el-row>
         <template v-for="item in formItems" :key="item.label">
           <el-col v-bind="colLayout">
             <el-form-item
+            v-if="!item.isHidden"
               :label="item.label"
-              :rules="item.rules"
+              :prop="item.field"
               :style="itemStyle"
             >
               <template
@@ -19,7 +20,17 @@
                   :placeholder="item.placeholder"
                   v-bind="item.otherOptions"
                   :show-password="item.type === 'password'"
-                  v-model="formData[`${item.field}`]"
+                  v-model="formData[item.field]"
+                />
+              </template>
+              <template
+                v-else-if="item.type === 'textarea'"
+              >
+                <el-input
+                  :placeholder="item.placeholder"
+                  v-bind="item.otherOptions"
+                  type="textarea"
+                  v-model="formData[item.field]"
                 />
               </template>
               <template v-else-if="item.type === 'select'">
@@ -33,6 +44,7 @@
                     v-for="option in item.options"
                     :key="option.value"
                     :value="option.value"
+                    :label="option.title"
                     >{{ option.title }}</el-option
                   >
                 </el-select>
@@ -57,6 +69,7 @@
 <script lang="ts">
 import { computed, defineComponent,PropType, ref, watch } from 'vue'
 import { IFormItem } from './type'
+import { ElForm } from 'element-plus'
 import _ from 'lodash';
 export default defineComponent({
   name: "formView",
@@ -86,11 +99,16 @@ export default defineComponent({
         sm: 24,
         xs: 24
       })
+    },
+    rules: {
+      type: Array,
+      default: () => []
     }
   },
   emits: ['update:modelValue'],
   setup(props, {emit}) {
     // const formData = ref(_.cloneDeep(props.modelValue))
+    const commonForm = ref<InstanceType<typeof ElForm>>()
     const formData = ref({...props.modelValue})
     // 计算属性是错误写法
   // const formData = computed({
@@ -109,8 +127,13 @@ export default defineComponent({
       },
       {deep: true}
     )
+    const resetForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
+      if (!formEl) return
+      formEl.resetFields()
+    }
     return {
-      formData
+      formData,
+      commonForm,
     }
   },
 })

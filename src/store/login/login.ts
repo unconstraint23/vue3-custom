@@ -58,10 +58,11 @@ const loginModule:Module<ILoginState,IRootState> = {
 
           }
       },
-      initLoginData({commit}) {
+      initLoginData({commit,dispatch}) {
         const token = localCache.getCache("token")
         if(token) {
           commit("setToken", token)
+          dispatch('getInitialDataAction',null, {root: true})
         }
         const userInfo = localCache.getCache("userInfo")
         if(userInfo) {

@@ -1,4 +1,4 @@
-import { getListData } from '@/service/main/system/system';
+import { createPageData, deletePageData, editPageData, getListData } from '@/service/main/system/system';
 import { IRootState } from '@/store/type';
 import { Module } from 'vuex';
 import { ISystemState } from './type';
@@ -73,8 +73,65 @@ const systemModule: Module<ISystemState,IRootState> = {
 
     }
 
+    },
+    async deletePageDataAction({ dispatch }, payload: any) {
+      // 1.获取pageName和id
+      // pageName -> /users
+      // id -> /users/id
+      const { pageName, id } = payload
+      const pageUrl = `/${pageName}/${id}`
+      try {
+        await deletePageData(pageUrl)
+      // eslint-disable-next-line no-empty
+      } catch (error) {
+
+      }
+      // 2.调用删除网络请求
+
+
+      // 3.重新请求最新的数据
+      dispatch('getPageListAction', {
+        pageName,
+        queryInfo: {
+          offset: 0,
+          size: 10
+        }
+      })
+    },
+    async createPageDataAction({ dispatch }, payload: any) {
+      // 1.创建数据的请求
+      const { pageName, newData } = payload
+      const pageUrl = `/${pageName}`
+      await createPageData(pageUrl, newData)
+
+      // 2.请求最新的数据
+      dispatch('getPageListActions', {
+        pageName,
+        queryInfo: {
+          offset: 0,
+          size: 10
+        }
+      })
+    },
+
+    async editPageDataAction({ dispatch }, payload: any) {
+      // 1.编辑数据的请求
+      const { pageName, editData, id } = payload
+      console.log(editData)
+      const pageUrl = `/${pageName}/${id}`
+      await editPageData(pageUrl, editData)
+
+
+      // 2.请求最新的数据
+      dispatch('getPageListActions', {
+        pageName,
+        queryInfo: {
+          offset: 0,
+          size: 10
+        }
+      })
     }
-  }
+  },
 }
 
 export default systemModule

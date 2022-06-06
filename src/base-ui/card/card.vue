@@ -1,0 +1,47 @@
+<template>
+  <el-card class="box-card">
+    <template #header>
+      <div class="card-header">
+        <span>{{title}}</span>
+
+      </div>
+    </template>
+    <div class="item">
+      <slot></slot>
+    </div>
+  </el-card>
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'cardView',
+  props: {
+    title: {
+      type: String,
+      default: "card name"
+    }
+  },
+  setup() {
+    return {}
+  }
+})
+</script>
+<style lang="scss" scoped>
+  .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text {
+  font-size: 14px;
+}
+.item {
+  margin-bottom: 10px;
+  // border: 1px solid red;
+}
+
+
+</style>
