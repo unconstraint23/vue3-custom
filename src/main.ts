@@ -7,6 +7,7 @@ import { registerI } from './components/global';
 import { globalRegister } from './public-methods';
 import "./css/index.scss";
 import "normalize.css"
+import menuPlugin from '@/base-ui/menu';
 
 
 
@@ -16,6 +17,7 @@ rootApp.use(store)
 getLoginData()
 rootApp.use(router)
 rootApp.use(globalRegister)
+rootApp.use(menuPlugin)
 
 registerI(rootApp)
 

@@ -37,7 +37,12 @@ export default defineComponent({
     const formItems = props.searchFormConfig?.formItems ?? []
     const formOriginData: any = {}
     for (const item of formItems) {
-      formOriginData[item.field] = ''
+      if(item.type === "upload") {
+        formOriginData[item.field] = []
+      } else {
+        formOriginData[item.field] = ''
+      }
+
     }
     let formData = ref(formOriginData)
     const resethandle = () => {

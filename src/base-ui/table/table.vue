@@ -14,6 +14,7 @@
       style="width: 100%"
       v-bind="childrenProps"
       @selection-change="handleSelectChange"
+      @row-contextmenu="rowContextMenu"
     >
       <el-table-column
         v-if="showSelectColumn"
@@ -55,7 +56,8 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent,getCurrentInstance } from 'vue'
+import { showContextMenu } from './utils/contextMenu';
 
 export default defineComponent({
   name: 'tableView',
@@ -97,8 +99,10 @@ export default defineComponent({
       default: true
     }
   },
+
   emits: ['selectionChange', 'update:page'],
   setup(props, { emit }) {
+    const { proxy } = getCurrentInstance() as any
     function handleSelectChange(value: any) {
       emit('selectionChange', value)
     }
@@ -109,16 +113,25 @@ export default defineComponent({
     const handleSizeChange = (pageSize: number) => {
       emit('update:page', { ...props.page, pageSize })
     }
+    const rowContextMenu = (row: any, column: any, event: MouseEvent) => {
+
+       showContextMenu(row,column,event,proxy)
+
+    }
     return {
       handleSelectChange,
       handleCurrentChange,
-      handleSizeChange
+      handleSizeChange,
+      rowContextMenu
     }
   }
 })
 </script>
 
 <style lang="scss" scoped>
+.table {
+  position: relative;
+}
 .header {
   display: flex;
   height: 45px;

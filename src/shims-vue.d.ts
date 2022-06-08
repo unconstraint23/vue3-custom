@@ -7,4 +7,6 @@ declare module '*.vue' {
 
 declare module 'lodash'
 declare module '*.json'
+declare module '*.js'
+declare module "gtc-context-menu"
 

@@ -1,6 +1,6 @@
 import { ElButton,ElContainer,ElMessageBox,ElMessage, ElTabs, ElTabPane, ElForm, ElFormItem, ElCheckbox, ElSelect, ElHeader, ElMain, ElRow, ElCol, ElSubMenu, ElRadioGroup, ElInput, ElDatePicker, ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn, ElPagination, ElImage, ElDialog } from 'element-plus'
 import { App } from 'vue'
-import {Fold,Expand, Van, Tools, CirclePlus, ElementPlus,Monitor, Setting, Goods, ChatLineRound, ArrowRight, ArrowDown, Close, RefreshLeft, Search, Edit, Delete} from '@element-plus/icons-vue'
+import {Fold,Expand, Van, Tools, CirclePlus, ElementPlus,Monitor, Setting, Goods, ChatLineRound, ArrowRight, ArrowDown, Close, RefreshLeft, Search, Edit, Delete, ZoomIn, Plus, Download} from '@element-plus/icons-vue'
 const Icon = [
   Fold,
   Expand,
@@ -18,7 +18,10 @@ const Icon = [
   RefreshLeft,
   Search,
   Edit,
-  Delete
+  Delete,
+  ZoomIn,
+  Plus,
+  Download
 ]
 const components = [
     ElButton,
